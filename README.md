@@ -1,2 +1,2 @@
 # animeshkherwar.com.np
-The Website of Animes Kherwar
+The Website of Animesh Kherwar
