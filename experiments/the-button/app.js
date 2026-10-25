@@ -41,7 +41,6 @@
     60: "I have accepted my fate.",
     69: "Hehe, nice!.",
     75: "Three quarters of a hundred. Don't you dare.",
-    77: "Thala for another season!"
     90: "Ten more and something happens. Probably.",
     99: "One more. Think carefully about who you've become.",
     100: "100. You absolute legend. You absolute menace.",
