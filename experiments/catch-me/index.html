@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Catch Me — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .arena { position: relative; height: min(64vh, 560px); padding: 0; cursor: crosshair; }
+    .arena-hud { position: absolute; top: 18px; left: 22px; right: 22px; display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); pointer-events: none; z-index: 2; }
+    .arena-hud b { color: var(--text); font-weight: 500; }
+    .taunt { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-size: clamp(18px, 2.6vw, 24px); font-weight: 600; letter-spacing: -0.02em; pointer-events: none; z-index: 2; padding: 0 16px; }
+    .taunt.pop { animation: reveal .4s var(--ease); }
+    .runner {
+      position: absolute; left: 0; top: 0; z-index: 3;
+      height: 56px; padding: 0 26px; border-radius: 999px; border: 0;
+      background: var(--exp); color: #000; font-weight: 700; font-size: 16px; letter-spacing: .02em;
+      box-shadow: 0 12px 40px -10px var(--exp);
+      cursor: pointer; white-space: nowrap;
+      transition: transform .32s cubic-bezier(.2,1.4,.4,1);
+      will-change: transform;
+    }
+    .runner.tired { transition-duration: .9s; filter: saturate(.6); }
+    .runner.caught { background: #fff; transition: transform .6s var(--ease); }
+    .win { position: absolute; inset: 0; z-index: 5; display: none; place-items: center; text-align: center; background: rgba(8,9,10,.88); backdrop-filter: blur(6px); }
+    .win.show { display: grid; animation: fadeIn .4s; }
+    .win h2 { margin: 10px 0 6px; font-size: clamp(34px, 6vw, 60px); letter-spacing: -0.05em; }
+    .win p { color: var(--muted); margin: 0 0 22px; }
+  </style>
+</head>
+<body data-root="../../" data-exp="005">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage arena" id="arena">
+      <div class="arena-hud"><span>Escapes: <b id="escapes">0</b></span><span>Best: <b id="best">—</b></span></div>
+      <button class="runner" id="runner">CLICK ME</button>
+      <div class="taunt" id="taunt">Simple. Just click the button.</div>
+      <div class="win" id="win">
+        <div>
+          <div style="font-size:54px">🏁</div>
+          <h2>You actually caught it.</h2>
+          <p id="winText">It took you a while.</p>
+          <button class="btn accent" id="again">Release it again</button>
+        </div>
+      </div>
+      <div class="device-gate">
+        <div>
+          <div class="big">🖱️</div>
+          <h3>Mouse required</h3>
+          <p>This button refuses to be poked by fingers. It's a desktop-only experiment — try it on a computer.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
