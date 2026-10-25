@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Coin Flip 3000 — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .cf { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(20px, 4vw, 48px); align-items: center; }
+    .coin-zone { position: relative; height: min(56vh, 460px); display: grid; place-items: center; perspective: 1100px; }
+    .coin-zone::after { /* floor shadow */
+      content: ""; position: absolute; bottom: 12%; left: 50%; width: 180px; height: 26px; transform: translateX(-50%);
+      background: radial-gradient(closest-side, rgba(0,0,0,.75), transparent); transition: transform .4s, opacity .4s;
+    }
+    .coin-zone.air::after { transform: translateX(-50%) scale(.55); opacity: .45; transition-duration: 1.5s; }
+    .coin { position: relative; width: clamp(170px, 40vw, 220px); aspect-ratio: 1; transform-style: preserve-3d; }
+    .face {
+      position: absolute; inset: 0; border-radius: 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      display: grid; place-items: center;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255,255,255,.75), transparent 28%),
+        conic-gradient(from 200deg, #b8860b, #ffe27a, #d4a017, #fff3b0, #b8860b, #f2c94c, #b8860b);
+      box-shadow: inset 0 0 0 7px rgba(120, 80, 0, .55), inset 0 0 0 11px rgba(255, 236, 160, .7), inset 0 0 30px rgba(90,60,0,.6);
+      color: #5a3a00; text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 -1px 0 rgba(0,0,0,.25);
+    }
+    .face .inner { text-align: center; line-height: 1; }
+    .face .mark { font-weight: 800; font-size: clamp(54px, 12vw, 70px); letter-spacing: -0.06em; }
+    .face .sub { margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .26em; font-weight: 700; }
+    .face.front { transform: translateZ(2px); }
+    .face.back { transform: rotateX(180deg) translateZ(2px); }
+    .coin .edge { position: absolute; inset: 1px; border-radius: 50%; background: #7a5600; }
+    .slomo {
+      position: absolute; top: 14px; left: 14px; z-index: 3;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: #ff453a;
+      display: none; align-items: center; gap: 8px;
+    }
+    .slomo i { width: 9px; height: 9px; border-radius: 50%; background: #ff453a; animation: pulse 1s infinite; }
+    .coin-zone.air .slomo { display: flex; }
+    .coin-zone.air { filter: contrast(1.05) saturate(1.1); }
+    .letterbox { position: absolute; left: 0; right: 0; height: 0; background: #000; z-index: 2; transition: height .6s var(--ease); }
+    .letterbox.top { top: 0; } .letterbox.bot { bottom: 0; }
+    .coin-zone.air .letterbox { height: 9%; }
+    .cf-log { font-family: var(--mono); font-size: 13.5px; line-height: 1.85; min-height: 230px; color: #b9c1cc; }
+    .cf-log .l { animation: reveal .45s var(--ease) both; }
+    .cf-log .l b { color: var(--exp); font-weight: 500; }
+    .result { margin: 10px 0 22px; font-size: clamp(56px, 10vw, 104px); font-weight: 800; letter-spacing: -0.06em; line-height: 1; min-height: 1em; }
+    .result.pop { animation: slam .6s cubic-bezier(.2,1.6,.4,1); }
+    @keyframes slam { from { opacity: 0; transform: scale(1.6); } }
+    .cf-stats { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 20px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .cf-stats b { color: var(--text); font-weight: 500; }
+    @media (max-width: 760px) {
+      .cf { grid-template-columns: 1fr; }
+      .coin-zone { height: 320px; }
+      .cf-log { min-height: 0; }
+    }
+  </style>
+</head>
+<body data-root="../../" data-exp="006">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage">
+      <div class="cf">
+        <div class="coin-zone" id="zone">
+          <div class="letterbox top"></div><div class="letterbox bot"></div>
+          <div class="slomo"><i></i>SLOW MOTION · 0.25×</div>
+          <div class="coin" id="coin">
+            <div class="edge"></div>
+            <div class="face front"><div class="inner"><div class="mark">AK</div><div class="sub">HEADS</div></div></div>
+            <div class="face back"><div class="inner"><div class="mark">🧪</div><div class="sub">TAILS</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="result" id="result" aria-live="polite"></div>
+          <div class="cf-log" id="log"><span class="muted">Decision engine idle. Awaiting a decision too important to make yourself.</span></div>
+          <div style="margin-top:18px"><button class="btn accent" id="flip">🪙 Initiate flip</button></div>
+          <div class="cf-stats">
+            <span>Heads: <b id="sh">0</b></span><span>Tails: <b id="st">0</b></span><span>Streak: <b id="ss">—</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
