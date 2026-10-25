@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Button — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .btn-stage { min-height: min(68vh, 620px); display: grid; place-items: center; text-align: center; }
+    .btn-arena { position: relative; isolation: isolate; width: 100%; height: 100%; display: grid; place-items: center; }
+    .big-red {
+      --size: clamp(190px, 46vw, 260px);
+      width: var(--size); height: var(--size); border-radius: 50%;
+      border: 0; cursor: pointer; position: relative;
+      background: radial-gradient(circle at 35% 28%, #ff8a8a 0%, #ff2d2d 32%, #c80f0f 70%, #7a0505 100%);
+      box-shadow:
+        0 18px 0 #5c0303,
+        0 30px 60px -10px rgba(255, 30, 30, 0.55),
+        inset 0 -14px 30px rgba(0, 0, 0, 0.35),
+        inset 0 10px 22px rgba(255, 255, 255, 0.35);
+      color: #fff; font-weight: 800; letter-spacing: 0.08em; font-size: clamp(15px, 3.6vw, 19px);
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      transition: transform 0.12s var(--ease), box-shadow 0.12s, width 0.5s var(--ease), height 0.5s var(--ease);
+      user-select: none; -webkit-user-select: none; touch-action: manipulation;
+    }
+    .bezel {
+      display: inline-grid; place-items: center; padding: 18px; border-radius: 50%;
+      background: linear-gradient(180deg, #2a2c30, #121316);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.08), 0 30px 50px -20px #000;
+      transition: translate 0.5s var(--ease), padding 0.5s var(--ease);
+    }
+    .bezel.tiny { padding: 6px; }
+    .big-red:active, .big-red.pressed {
+      transform: translateY(14px);
+      box-shadow: 0 4px 0 #5c0303, 0 10px 30px -10px rgba(255, 30, 30, 0.6), inset 0 -8px 20px rgba(0, 0, 0, 0.35), inset 0 8px 18px rgba(255, 255, 255, 0.3);
+    }
+    .big-red.tiny { --size: 46px; font-size: 0; }
+    .big-red.blue { background: radial-gradient(circle at 35% 28%, #8ac8ff 0%, #2d8bff 32%, #0f55c8 70%, #05227a 100%); box-shadow: 0 18px 0 #03215c, 0 30px 60px -10px rgba(30, 120, 255, 0.55), inset 0 -14px 30px rgba(0,0,0,.35), inset 0 10px 22px rgba(255,255,255,.35); }
+    .btn-msg { min-height: 64px; margin-top: 56px; font-size: clamp(20px, 3.4vw, 28px); letter-spacing: -0.03em; font-weight: 600; max-width: 560px; padding: 0 10px; }
+    .btn-msg.pop { animation: reveal 0.5s var(--ease); }
+    .btn-count { margin-top: 10px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+    .btn-count b { color: var(--text); }
+    .deal { display: none; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+    .deal.show { display: flex; animation: reveal .5s var(--ease); }
+    .sys-warn {
+      position: fixed; inset: 0; z-index: 800; display: none; place-items: center; padding: 16px;
+      background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px);
+    }
+    .sys-warn.show { display: grid; animation: fadeIn .2s; }
+    .sys-box { width: min(440px, 100%); border-radius: 16px; overflow: hidden; background: #f1f1f1; color: #111; box-shadow: 0 40px 100px -20px #000; animation: modalIn .35s var(--ease); }
+    .sys-title { background: linear-gradient(90deg, #c40000, #ff3b3b); color: #fff; padding: 10px 14px; font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; }
+    .sys-body { padding: 22px; display: flex; gap: 16px; align-items: start; font-size: 15px; }
+    .sys-body .ic { font-size: 34px; line-height: 1; }
+    .sys-actions { display: flex; gap: 8px; justify-content: flex-end; padding: 0 18px 18px; flex-wrap: wrap; }
+    .sys-actions button { border: 1px solid #bbb; background: #fff; border-radius: 8px; padding: 8px 14px; cursor: pointer; color: #111; font-size: 14px; }
+    .sys-actions button.primary { background: #0a64d8; color: #fff; border-color: #0a64d8; }
+    .confetti { position: fixed; top: -20px; width: 10px; height: 14px; z-index: 700; pointer-events: none; animation: fall linear forwards; }
+    @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+  </style>
+</head>
+<body data-root="../../" data-exp="001">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage btn-stage">
+      <div class="btn-arena">
+        <div>
+          <div class="bezel" id="bezel"><button class="big-red" id="bigRed" aria-label="Do not press">DO NOT<br>PRESS</button></div>
+          <div class="btn-msg" id="msg" aria-live="polite">It's a simple instruction.</div>
+          <div class="deal" id="deal">
+            <button class="btn sm accent" id="dealYes">Accept the deal</button>
+            <button class="btn sm ghost" id="dealNo">Keep pressing</button>
+          </div>
+          <div class="btn-count">Times pressed: <b id="count">0</b></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="sys-warn" id="warn" role="alertdialog" aria-modal="true">
+    <div class="sys-box">
+      <div class="sys-title"><span>System Warning</span><span>✕</span></div>
+      <div class="sys-body"><span class="ic">⚠️</span><div><b>Excessive button pressing detected.</b><br>The Lab has logged this incident. Continued pressing may void your warranty, dignity, or both.</div></div>
+      <div class="sys-actions"><button id="warnOk">I understand</button><button class="primary" id="warnPress">Press it anyway</button></div>
+    </div>
+  </div>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
