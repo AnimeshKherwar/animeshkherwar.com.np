@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Overthinking Machine — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .ot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 3vw, 32px); }
+    label.lbl { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    textarea {
+      width: 100%; min-height: 150px; resize: vertical; padding: 18px; border-radius: 18px;
+      background: rgba(0,0,0,.35); border: 1px solid var(--line-2); color: var(--text);
+      font: 500 18px/1.45 var(--font); outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    textarea:focus { border-color: var(--exp); box-shadow: 0 0 0 4px color-mix(in srgb, var(--exp) 18%, transparent); }
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+    .presets button { font-size: 13px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--muted); cursor: pointer; }
+    .presets button:hover { color: var(--text); border-color: var(--line-2); }
+    .console {
+      border-radius: 18px; border: 1px solid var(--line); background: #050607;
+      padding: 18px; min-height: 360px; font-family: var(--mono); font-size: 13.5px; line-height: 1.75;
+      display: flex; flex-direction: column;
+    }
+    .console .idle { margin: auto; color: var(--dim); text-align: center; }
+    .log-line { animation: reveal .35s var(--ease) both; color: #b9c1cc; }
+    .log-line .ok { color: var(--exp); }
+    .log-line .warn { color: #ffd60a; }
+    .log-line .bad { color: #ff453a; }
+    .progress { height: 4px; border-radius: 99px; background: rgba(255,255,255,.06); margin-top: auto; overflow: hidden; }
+    .progress i { display: block; height: 100%; width: 0; background: var(--exp); transition: width .4s var(--ease); }
+    .report { margin-top: 22px; display: none; }
+    .report.show { display: block; animation: reveal .7s var(--ease); }
+    .risk { padding: clamp(22px, 4vw, 36px); border-radius: 22px; border: 1px solid rgba(255,69,58,.35); background: radial-gradient(120% 120% at 0 0, rgba(255,69,58,.18), transparent 60%); }
+    .risk small { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #ff6961; }
+    .risk h2 { margin: 6px 0 0; font-size: clamp(38px, 7vw, 72px); letter-spacing: -0.05em; line-height: 1; color: #ff453a; }
+    .risk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+    .risk-grid .panel b { display: block; font-size: 24px; letter-spacing: -0.03em; }
+    .risk-grid .panel span { font-size: 13px; color: var(--muted); }
+    .rec { margin-top: 18px; font-size: clamp(20px, 3vw, 28px); letter-spacing: -0.03em; font-weight: 600; }
+    .rec span { color: var(--exp); }
+    @media (max-width: 760px) {
+      .ot-grid { grid-template-columns: 1fr; }
+      .console { min-height: 260px; }
+      .risk-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-root="../../" data-exp="004">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage">
+      <div class="ot-grid">
+        <div>
+          <label class="lbl" for="input">Describe a completely harmless situation</label>
+          <textarea id="input" maxlength="240" placeholder="e.g. Someone replied “ok.” to my message."></textarea>
+          <div class="presets" id="presets">
+            <button>Someone replied “ok.”</button>
+            <button>My manager said “got a minute?”</button>
+            <button>They saw my story but didn't reply</button>
+            <button>A friend said “we need to talk later”</button>
+            <button>I said “you too” to the waiter</button>
+          </div>
+          <button class="btn accent" id="go">🌀 Overthink this</button>
+        </div>
+        <div class="console" id="console" aria-live="polite">
+          <div class="idle">Awaiting a perfectly normal situation<br>to catastrophically misinterpret.</div>
+        </div>
+      </div>
+
+      <div class="report" id="report">
+        <div class="risk">
+          <small>Final assessment</small>
+          <h2 id="riskLevel">CATASTROPHIC</h2>
+          <div class="risk-grid">
+            <div class="panel"><b id="m1">97%</b><span>Internal panic level</span></div>
+            <div class="panel"><b id="m2">14</b><span>Imaginary arguments prepared</span></div>
+            <div class="panel"><b id="m3">0.4%</b><span>Chance anyone else noticed</span></div>
+          </div>
+          <div class="rec">Recommended action: <span id="rec">Do absolutely nothing.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
