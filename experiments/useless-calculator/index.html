@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Useless Calculator — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .calc-stage { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: center; }
+    .calc {
+      width: 100%; padding: 18px; border-radius: 34px;
+      background: linear-gradient(180deg, #1a1b1e, #0d0e10);
+      border: 1px solid var(--line-2);
+      box-shadow: 0 40px 80px -30px #000, inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .screen { padding: 22px 10px 14px; text-align: right; min-height: 128px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .expr { font-family: var(--mono); font-size: 14px; color: var(--muted); min-height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .out { font-size: 64px; font-weight: 300; letter-spacing: -0.04em; line-height: 1.1; white-space: nowrap; overflow: hidden; transition: font-size .15s; }
+    .keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .key {
+      aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer;
+      font-size: clamp(22px, 6vw, 28px); font-weight: 500;
+      background: #2c2d31; color: #fff;
+      transition: filter .15s, transform .1s;
+      touch-action: manipulation; user-select: none; -webkit-user-select: none;
+    }
+    .key:hover { filter: brightness(1.18); }
+    .key:active, .key.flash { transform: scale(.94); filter: brightness(1.4); }
+    .key.fn { background: #a5a5a5; color: #000; }
+    .key.op { background: #ff9f0a; }
+    .key.op.on { background: #fff; color: #ff9f0a; }
+    .key.zero { grid-column: span 2; aspect-ratio: auto; border-radius: 999px; text-align: left; padding-left: 28px; }
+    .verdict { min-height: 220px; }
+    .verdict .label { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--exp); }
+    .verdict .says { margin-top: 14px; font-size: clamp(26px, 4vw, 44px); line-height: 1.08; letter-spacing: -0.04em; font-weight: 600; }
+    .verdict .says.pop { animation: reveal .5s var(--ease); }
+    .verdict .sub { margin-top: 16px; color: var(--muted); }
+    .calc-stats { margin-top: 24px; display: flex; gap: 22px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .calc-stats b { color: var(--text); font-weight: 500; }
+    @media (max-width: 760px) {
+      .calc-stage { grid-template-columns: 1fr; }
+      .verdict { min-height: 0; }
+      .calc { max-width: 400px; margin: 0 auto; }
+      .out { font-size: 54px; }
+    }
+  </style>
+</head>
+<body data-root="../../" data-exp="002">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage">
+      <div class="calc-stage">
+        <div class="calc" role="application" aria-label="Calculator">
+          <div class="screen">
+            <div class="expr" id="expr">&nbsp;</div>
+            <div class="out" id="out" aria-live="polite">0</div>
+          </div>
+          <div class="keys" id="keys">
+            <button class="key fn" data-a="clear">AC</button>
+            <button class="key fn" data-a="sign">±</button>
+            <button class="key fn" data-a="pct">%</button>
+            <button class="key op" data-op="÷">÷</button>
+            <button class="key" data-d="7">7</button><button class="key" data-d="8">8</button><button class="key" data-d="9">9</button>
+            <button class="key op" data-op="×">×</button>
+            <button class="key" data-d="4">4</button><button class="key" data-d="5">5</button><button class="key" data-d="6">6</button>
+            <button class="key op" data-op="−">−</button>
+            <button class="key" data-d="1">1</button><button class="key" data-d="2">2</button><button class="key" data-d="3">3</button>
+            <button class="key op" data-op="+">+</button>
+            <button class="key zero" data-d="0">0</button>
+            <button class="key" data-d=".">.</button>
+            <button class="key op" data-a="eq">=</button>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <div class="label">Calculator commentary</div>
+          <div class="says" id="says">Go on. Ask me something you could do in your head.</div>
+          <div class="sub" id="sub">Keyboard works too, if you'd like to disappoint me faster.</div>
+          <div class="calc-stats">
+            <span>Calculations: <b id="nCalc">0</b></span>
+            <span>Ones I found insulting: <b id="nEasy">0</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
