@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Excuse Generator — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .cats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cat {
+      height: 42px; padding: 0 16px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--line-2); background: transparent; color: var(--muted); font-weight: 500;
+      transition: all .2s;
+    }
+    .cat:hover { color: var(--text); }
+    .cat.on { background: var(--exp); color: #000; border-color: var(--exp); }
+    .excuse-card {
+      margin: 28px 0; padding: clamp(24px, 5vw, 48px); border-radius: 24px;
+      background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--exp) 16%, transparent), transparent 60%), rgba(255,255,255,.02);
+      border: 1px solid var(--line-2); min-height: 240px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+    }
+    .excuse-text { font-size: clamp(24px, 4.2vw, 42px); line-height: 1.12; letter-spacing: -0.035em; font-weight: 600; }
+    .excuse-text.pop { animation: reveal .55s var(--ease); }
+    .excuse-meta { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .meter { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .meter-bar { width: 160px; height: 8px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; }
+    .meter-bar i { display: block; height: 100%; border-radius: 99px; transition: width .6s var(--ease), background .6s; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    @media (max-width: 640px) {
+      .actions .btn { flex: 1 1 100%; }
+      .cats { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; scrollbar-width: none; }
+      .cat { flex: none; }
+    }
+  </style>
+</head>
+<body data-root="../../" data-exp="003">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage">
+      <div class="cats" id="cats" role="tablist" aria-label="Excuse category"></div>
+
+      <div class="excuse-card">
+        <div class="excuse-text" id="excuse" aria-live="polite">Select a situation. The Lab will handle the accountability.</div>
+        <div class="excuse-meta">
+          <div class="meter">Believability <span class="meter-bar"><i id="bar" style="width:50%;background:#ffd60a"></i></span> <span id="barLabel">—</span></div>
+          <button class="chip-btn" id="copy">Copy excuse</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn accent" id="another">Another one</button>
+        <button class="btn ghost" id="better">Make it more believable</button>
+        <button class="btn ghost" id="worse">Make it significantly worse</button>
+      </div>
+    </section>
+  </main>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
