@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hacker Mode — Animesh Kherwar's Lab</title>
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <style>
+    .hk { position: relative; padding: 0; background: #020403; border-color: rgba(50,215,75,.25); min-height: min(70vh, 640px); }
+    .hk canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .16; pointer-events: none; }
+    .hk-inner { position: relative; z-index: 1; padding: clamp(18px, 4vw, 36px); font-family: var(--mono); color: #32d74b; font-size: clamp(12.5px, 2.4vw, 14.5px); line-height: 1.75; text-shadow: 0 0 8px rgba(50,215,75,.45); }
+    .hk-top { display: flex; justify-content: space-between; gap: 10px; color: rgba(50,215,75,.6); font-size: 11px; letter-spacing: .14em; border-bottom: 1px dashed rgba(50,215,75,.25); padding-bottom: 12px; margin-bottom: 18px; }
+    .hk-form { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .hk-field { flex: 1 1 260px; display: flex; align-items: center; gap: 6px; border: 1px solid rgba(50,215,75,.45); border-radius: 12px; padding: 0 14px; height: 52px; background: rgba(50,215,75,.05); }
+    .hk-field span { opacity: .7; }
+    .hk-field input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #b6ffc2; font: 500 16px var(--mono); }
+    .hk-go { height: 52px; padding: 0 22px; border-radius: 12px; border: 0; cursor: pointer; background: #32d74b; color: #001a05; font: 700 14px var(--mono); letter-spacing: .1em; box-shadow: 0 0 30px -6px #32d74b; }
+    .hk-go:disabled { opacity: .4; cursor: not-allowed; }
+    .hk-err { color: #ff6961; min-height: 22px; margin-top: 8px; font-size: 12.5px; text-shadow: none; }
+    .hk-out { margin-top: 18px; white-space: pre-wrap; word-break: break-word; }
+    .hk-out .dim { color: rgba(50,215,75,.55); }
+    .hk-out .red { color: #ff453a; text-shadow: 0 0 10px rgba(255,69,58,.6); }
+    .hk-out .white { color: #fff; text-shadow: none; }
+    .bar { display: inline-block; letter-spacing: -1px; }
+    .granted { display: inline-block; margin: 10px 0; padding: 10px 18px; border: 2px solid #ff453a; color: #ff453a; font-weight: 700; font-size: clamp(18px, 4vw, 26px); letter-spacing: .2em; animation: blink .5s steps(2) 6; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .reveal-card { margin-top: 20px; padding: 22px; border-radius: 18px; background: #f5f5f7; color: #111; font-family: var(--font); text-shadow: none; line-height: 1.5; animation: reveal .6s var(--ease); }
+    .reveal-card h3 { margin: 0 0 6px; font-size: clamp(22px, 4vw, 30px); letter-spacing: -0.03em; }
+    .reveal-card p { margin: 6px 0; color: #444; }
+    .reveal-card .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .reveal-card .btn { box-shadow: none; }
+    .reveal-card .btn.dark { background: #111; color: #fff; }
+    .disclaimer { margin-top: 14px; font-family: var(--mono); font-size: 11.5px; color: var(--dim); text-align: center; }
+    .cursor::after { content: "▋"; animation: blink 1s steps(2) infinite; }
+  </style>
+</head>
+<body data-root="../../" data-exp="008">
+  <div data-lab-header></div>
+  <section data-lab-hero></section>
+
+  <main class="wrap">
+    <section class="stage hk">
+      <canvas id="rain"></canvas>
+      <div class="hk-inner">
+        <div class="hk-top"><span>LAB//BREACH_SUITE v13.37</span><span id="hkClock"></span></div>
+        <div>&gt; Target platform: <b>INSTAGRAM</b></div>
+        <div style="margin-bottom:12px">&gt; Enter target ID to begin an extremely serious operation.</div>
+        <form class="hk-form" id="form" autocomplete="off">
+          <label class="hk-field"><span>@</span><input id="handle" maxlength="30" placeholder="instagram_id" spellcheck="false" autocapitalize="off" aria-label="Instagram ID"></label>
+          <button class="hk-go" id="go" type="submit">HACK ▶</button>
+        </form>
+        <div class="hk-err" id="err"></div>
+        <div class="hk-out" id="out"></div>
+      </div>
+    </section>
+    <p class="disclaimer">This is a joke. Nothing is accessed, sent or stored. Your browser doesn't even talk to Instagram.</p>
+  </main>
+
+  <nav data-lab-pager></nav>
+
+  <script src="../../assets/js/registry.js"></script>
+  <script src="../../assets/js/lab.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
