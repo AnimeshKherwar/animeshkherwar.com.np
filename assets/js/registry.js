@@ -89,5 +89,5 @@ window.LAB_ACHIEVEMENTS = [
   { id: "final-final",    icon: "📁", title: "FINAL_v2_FINAL",             desc: "Reached the bottom of Definitely Important.", secret: true },
   { id: "hacker",         icon: "🕶️", title: "Ethical Hacker",             desc: "Completed a deeply fake breach." },
   { id: "snake-sap",      icon: "🗄️", title: "Ate the Server",             desc: "Reached the SAP Server stage in Snake." },
-   { id: "cricket",       icon: "🏏", title: "Better than football",       desc: "Thala for a reason." }.
+ { id: "cricket",         icon: "🏏", title: "Better than football",       desc: "Thala for a reason." }
 ];
