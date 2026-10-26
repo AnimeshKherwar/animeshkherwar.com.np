@@ -4,7 +4,6 @@
    To add an experiment: add an entry to LAB_EXPERIMENTS and
    create /experiments/<slug>/index.html (+ app.js).
    ========================================================= */
-
 window.LAB_EXPERIMENTS = [
   {
     id: "001", slug: "the-button", title: "The Button", icon: "🔴",
@@ -61,13 +60,12 @@ window.LAB_EXPERIMENTS = [
     device: "all", accent: "#a8ff3e"
   },
     {
-    id: "010", slug: "Cricket", title: "Cricket 2.5D", icon: "🏏",
+    id: "010", slug: "cricket", title: "Cricket 2.5D", icon: "🏏",
     tagline: "Play cricket - Test, ODI, T20I, IPL.",
-    blurb: "Playing XIs might be outdated.",
+    blurb: "Better than ludo.",
     device: "all", accent: "#a8ff3e"
   }
 ];
-
 /* secret: true -> shown as ??? in the Passport until unlocked */
 window.LAB_ACHIEVEMENTS = [
   { id: "welcome",        icon: "🧪", title: "Lab Access Granted",        desc: "Entered the Lab for the first time." },
@@ -75,7 +73,6 @@ window.LAB_ACHIEVEMENTS = [
   { id: "completionist",  icon: "🗺️", title: "Full Tour",                 desc: "Opened every experiment in the Lab." },
   { id: "logo-tapper",    icon: "👆", title: "Persistent Clicker",         desc: "Clicked the Lab logo 7 times.", secret: true },
   { id: "konami",         icon: "🎮", title: "Old Habits",                 desc: "Entered a very old code.", secret: true },
-
   { id: "button-25",      icon: "🚫", title: "I Was Specifically Told Not To", desc: "Pressed The Button 25 times." },
   { id: "button-deal",    icon: "🤝", title: "Diplomat",                   desc: "Negotiated with a button." },
   { id: "button-100",     icon: "💯", title: "Centurion",                  desc: "Pressed The Button 100 times.", secret: true },
