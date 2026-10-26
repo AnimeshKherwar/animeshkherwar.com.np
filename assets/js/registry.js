@@ -59,6 +59,12 @@ window.LAB_EXPERIMENTS = [
     tagline: "It starts with an apple. It does not end with one.",
     blurb: "Classic Snake with a progressively unreasonable diet.",
     device: "all", accent: "#a8ff3e"
+  },
+    {
+    id: "010", slug: "Cricket", title: "Cricket 2.5D", icon: "🏏",
+    tagline: "Play cricket - Test, ODI, T20I, IPL.",
+    blurb: "Playing XIs might be outdated.",
+    device: "all", accent: "#a8ff3e"
   }
 ];
 
@@ -81,6 +87,7 @@ window.LAB_ACHIEVEMENTS = [
   { id: "flip-10",        icon: "🪙", title: "Probability Enthusiast",     desc: "Flipped the coin 10 times." },
   { id: "do-not-open",    icon: "💥", title: "Warnings Are Suggestions",   desc: "Opened the folder labelled DO NOT OPEN." },
   { id: "final-final",    icon: "📁", title: "FINAL_v2_FINAL",             desc: "Reached the bottom of Definitely Important.", secret: true },
-  { id: "hacker",         icon: "🕶️", title: "Ethical Hacker",            desc: "Completed a deeply fake breach." },
-  { id: "snake-sap",      icon: "🗄️", title: "Ate the Server",             desc: "Reached the SAP Server stage in Snake." }
+  { id: "hacker",         icon: "🕶️", title: "Ethical Hacker",             desc: "Completed a deeply fake breach." },
+  { id: "snake-sap",      icon: "🗄️", title: "Ate the Server",             desc: "Reached the SAP Server stage in Snake." },
+   { id: "cricket",       icon: "🏏", title: "Better than football",       desc: "Thala for a reason." }.
 ];
