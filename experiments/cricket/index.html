@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c1222">
+  <title>Cricket, Unreasonably Serious — Animesh Kherwar's Lab</title>
+  <meta name="description" content="A broadcast-style cricket game: Test, ODI, T20, IPL-style tournament, nets, chases and super overs. Runs entirely in your browser.">
+  <link rel="stylesheet" href="../../assets/css/lab.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="crk-page">
+  <!-- ===== SHARED LAB SHELL: START (keep identical to the other experiment pages) ===== -->
+  <!-- ===== SHARED LAB SHELL: END ===== -->
+
+  <main id="crk" class="crk" aria-labelledby="crk-title">
+    <!-- HOME -->
+    <section class="crk-screen is-active" id="scr-home" aria-labelledby="crk-title">
+      <div class="crk-hero">
+        <p class="crk-kicker">Experiment · Sport · Excessive gravitas</p>
+        <h1 id="crk-title">Cricket, <span>Unreasonably Serious</span></h1>
+        <p class="crk-sub">Real cricket rules. Real physics. Commentary of variable sanity.</p>
+        <p class="crk-snap" id="home-snapshot"></p>
+      </div>
+      <nav class="crk-menu" aria-label="Game modes">
+        <button class="crk-btn crk-btn--primary" data-go="setup" data-mode="intl">International match<small>T20 · ODI · Test · Arcade</small></button>
+        <button class="crk-btn crk-btn--primary" data-go="setup" data-mode="ipl">IPL exhibition<small id="ipl-season-small">Franchise match</small></button>
+        <button class="crk-btn crk-btn--primary" data-go="tour">IPL-style tournament<small>Custom schedule · save &amp; resume</small></button>
+        <button class="crk-btn" data-go="challenges">Chase challenges<small>Situations to rescue</small></button>
+        <button class="crk-btn" data-go="setup" data-mode="super">Super Over<small>1 over · 2 wickets</small></button>
+        <button class="crk-btn" data-act="daily">Daily seeded challenge<small id="daily-small">Same for everyone today</small></button>
+        <button class="crk-btn" data-go="setup" data-mode="nets">Nets<small>Practise batting or bowling</small></button>
+        <button class="crk-btn crk-btn--resume" data-act="resume" id="btn-resume" hidden>Resume saved match<small id="resume-small"></small></button>
+      </nav>
+      <nav class="crk-menu crk-menu--small" aria-label="More">
+        <button class="crk-btn crk-btn--ghost" data-go="career">Career stats</button>
+        <button class="crk-btn crk-btn--ghost" data-go="unlocks">Achievements &amp; stadiums</button>
+        <button class="crk-btn crk-btn--ghost" data-go="settings">Settings</button>
+        <button class="crk-btn crk-btn--ghost" data-go="about">Sources &amp; about</button>
+      </nav>
+    </section>
+
+    <!-- SETUP -->
+    <section class="crk-screen" id="scr-setup" aria-labelledby="setup-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home" aria-label="Back to menu">← Back</button><h2 id="setup-title">Match setup</h2></header>
+      <div class="crk-panel">
+        <fieldset class="crk-field" id="fs-format"><legend>Format</legend><div class="crk-chips" id="format-chips"></div><p class="crk-note" id="format-note"></p></fieldset>
+        <div class="crk-two">
+          <fieldset class="crk-field"><legend>Your team</legend>
+            <label class="crk-lbl" for="sel-a">Team</label><select id="sel-a" class="crk-select"></select>
+            <p class="crk-snapline" id="snap-a"></p>
+            <button class="crk-btn crk-btn--small" data-act="edit-xi" data-team="0">Edit XI, keeper, captain &amp; order</button>
+            <p class="crk-xi-sum" id="xi-sum-a"></p>
+          </fieldset>
+          <fieldset class="crk-field"><legend>Opponent</legend>
+            <label class="crk-lbl" for="sel-b">Team</label><select id="sel-b" class="crk-select"></select>
+            <p class="crk-snapline" id="snap-b"></p>
+            <button class="crk-btn crk-btn--small" data-act="edit-xi" data-team="1">Edit opponent XI</button>
+            <p class="crk-xi-sum" id="xi-sum-b"></p>
+          </fieldset>
+        </div>
+        <fieldset class="crk-field" id="fs-nets" hidden><legend>Nets mode</legend>
+          <div class="crk-chips"><label class="crk-chip"><input type="radio" name="netsrole" value="bat" checked> Bat</label><label class="crk-chip"><input type="radio" name="netsrole" value="bowl"> Bowl</label></div>
+        </fieldset>
+        <div class="crk-two">
+          <label class="crk-lbl">Difficulty
+            <select id="sel-diff" class="crk-select"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option><option value="legend">Legend</option></select>
+          </label>
+          <label class="crk-lbl">Stadium
+            <select id="sel-theme" class="crk-select"></select>
+          </label>
+        </div>
+        <ul class="crk-errors" id="setup-errors" role="alert"></ul>
+        <button class="crk-btn crk-btn--primary crk-wide" data-act="to-toss">Continue to toss</button>
+      </div>
+    </section>
+
+    <!-- XI EDITOR -->
+    <section class="crk-screen" id="scr-xi" aria-labelledby="xi-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-act="xi-done" aria-label="Save XI and go back">← Done</button><h2 id="xi-title">Playing XI</h2></header>
+      <div class="crk-panel">
+        <p class="crk-note" id="xi-rules"></p>
+        <div class="crk-two crk-two--xi">
+          <div><h3>Squad</h3><ul class="crk-list" id="xi-squad"></ul></div>
+          <div><h3>Batting order</h3><ol class="crk-list crk-order" id="xi-order"></ol>
+            <label class="crk-lbl">Wicketkeeper <select id="xi-keeper" class="crk-select"></select></label>
+            <label class="crk-lbl">Captain <select id="xi-captain" class="crk-select"></select></label>
+            <label class="crk-lbl" id="xi-impact-wrap" hidden>Impact Player substitute <select id="xi-impact" class="crk-select"></select></label>
+          </div>
+        </div>
+        <ul class="crk-errors" id="xi-errors" role="alert"></ul>
+      </div>
+    </section>
+
+    <!-- TOSS -->
+    <section class="crk-screen" id="scr-toss" aria-labelledby="toss-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="setup">← Back</button><h2 id="toss-title">The toss</h2></header>
+      <div class="crk-panel crk-center">
+        <div class="crk-coin" id="coin" aria-hidden="true"><span>H</span></div>
+        <p id="toss-text" aria-live="polite">Call it.</p>
+        <div class="crk-row" id="toss-call"><button class="crk-btn crk-btn--primary" data-act="call" data-v="H">Heads</button><button class="crk-btn crk-btn--primary" data-act="call" data-v="T">Tails</button></div>
+        <div class="crk-row" id="toss-choose" hidden><button class="crk-btn crk-btn--primary" data-act="choose" data-v="bat">Bat first</button><button class="crk-btn crk-btn--primary" data-act="choose" data-v="bowl">Bowl first</button></div>
+        <button class="crk-btn" id="toss-go" data-act="start-match" hidden>Start match</button>
+      </div>
+    </section>
+
+    <!-- MATCH -->
+    <section class="crk-screen crk-screen--match" id="scr-match" aria-label="Match">
+      <div class="crk-stage" id="stage">
+        <canvas id="cv" class="crk-canvas" role="img" aria-label="Cricket field view"></canvas>
+        <div class="crk-score" id="score" aria-live="off">
+          <div class="crk-score__main"><span class="crk-score__team" id="sb-team">—</span><strong id="sb-runs">0/0</strong><span id="sb-overs">0.0</span><span class="crk-tag" id="sb-tag"></span></div>
+          <div class="crk-score__sub"><span id="sb-bat1"></span><span id="sb-bat2"></span><span id="sb-bowl"></span></div>
+          <div class="crk-score__sub"><span id="sb-info"></span><span id="sb-part"></span></div>
+          <div class="crk-over" id="sb-over" aria-label="This over"></div>
+        </div>
+        <p class="crk-ticker" id="ticker" aria-live="polite"></p>
+        <div class="crk-feedback" id="feedback" aria-hidden="true"></div>
+        <div class="crk-timing" id="timing" hidden><i id="timing-fill"></i><b id="timing-zone"></b></div>
+        <button class="crk-btn crk-btn--icon crk-pausebtn" data-act="pause" aria-label="Pause">II</button>
+
+        <!-- batting controls -->
+        <div class="crk-ctl crk-ctl--bat" id="ctl-bat" hidden>
+          <div class="crk-aimpad" id="aimpad" role="slider" tabindex="0" aria-label="Shot direction" aria-valuemin="-180" aria-valuemax="180" aria-valuenow="0"><i id="aimknob"></i><span id="aimlabel">Straight</span></div>
+          <div class="crk-shotbtns">
+            <button class="crk-btn crk-btn--shot" data-shot="ground" aria-label="Ground shot (J or Space)">Ground</button>
+            <button class="crk-btn crk-btn--shot crk-btn--loft" data-shot="loft" aria-label="Lofted shot (K)">Loft</button>
+            <button class="crk-btn crk-btn--shot crk-btn--defend" data-shot="defend" aria-label="Defend (L)">Defend</button>
+            <button class="crk-btn crk-btn--shot crk-btn--leave" data-shot="leave" aria-label="Leave the ball (H)">Leave</button>
+          </div>
+        </div>
+        <div class="crk-ctl crk-ctl--run" id="ctl-run" hidden>
+          <button class="crk-btn crk-btn--run" data-act="run" aria-label="Run (R)">Run</button>
+          <button class="crk-btn crk-btn--return" data-act="return" aria-label="Return / stay (E)">Return</button>
+        </div>
+        <!-- bowling controls -->
+        <div class="crk-ctl crk-ctl--bowl" id="ctl-bowl" hidden>
+          <div class="crk-types" id="bowl-types" role="radiogroup" aria-label="Delivery type"></div>
+          <p class="crk-hint" id="bowl-hint">Tap the pitch to aim · then release in the green</p>
+          <div class="crk-meter" id="meter" aria-hidden="true"><i id="meter-needle"></i><b></b></div>
+          <button class="crk-btn crk-btn--release" data-act="release" aria-label="Release (Space)">Release</button>
+        </div>
+        <!-- between-ball controls -->
+        <div class="crk-ctl crk-ctl--between" id="ctl-between" hidden>
+          <button class="crk-btn crk-btn--primary" data-act="next">Next ball</button>
+          <button class="crk-btn" data-act="replay" id="btn-replay">Replay</button>
+          <button class="crk-btn" data-act="sim-over">Sim over</button>
+          <button class="crk-btn" data-act="sim-inn">Sim innings</button>
+          <button class="crk-btn" data-act="field" id="btn-field">Field</button>
+          <button class="crk-btn" data-act="card">Scorecard</button>
+          <button class="crk-btn" data-act="declare" id="btn-declare" hidden>Declare</button>
+          <button class="crk-btn" data-act="impact" id="btn-impact" hidden>Impact Player</button>
+          <button class="crk-btn" data-act="pause" id="btn-exit" hidden>Finish nets</button>
+        </div>
+        <div class="crk-ctl crk-ctl--skip" id="ctl-skip" hidden><button class="crk-btn" data-act="skip">Skip ▶▶</button></div>
+        <!-- field editor -->
+        <div class="crk-ctl crk-ctl--field" id="ctl-field" hidden>
+          <p class="crk-hint" id="field-hint">Drag fielders. Dashed ring = 30-yard circle.</p>
+          <div class="crk-chips" id="field-presets"></div>
+          <div class="crk-row"><button class="crk-btn crk-btn--primary" data-act="field-save">Done</button><button class="crk-btn" data-act="field-reset">Use preset only</button></div>
+        </div>
+      </div>
+      <p class="crk-sr" id="sr-live" aria-live="assertive"></p>
+    </section>
+
+    <!-- TOURNAMENT -->
+    <section class="crk-screen" id="scr-tour" aria-labelledby="tour-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home">← Back</button><h2 id="tour-title">IPL-style tournament</h2></header>
+      <div class="crk-panel" id="tour-body"></div>
+    </section>
+
+    <!-- CHALLENGES -->
+    <section class="crk-screen" id="scr-challenges" aria-labelledby="ch-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home">← Back</button><h2 id="ch-title">Chase challenges</h2></header>
+      <div class="crk-panel"><ul class="crk-cards" id="ch-list"></ul></div>
+    </section>
+
+    <!-- CAREER -->
+    <section class="crk-screen" id="scr-career" aria-labelledby="car-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home">← Back</button><h2 id="car-title">Career statistics (this browser)</h2></header>
+      <div class="crk-panel" id="career-body"></div>
+    </section>
+
+    <!-- UNLOCKS -->
+    <section class="crk-screen" id="scr-unlocks" aria-labelledby="un-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home">← Back</button><h2 id="un-title">Achievements &amp; stadiums</h2></header>
+      <div class="crk-panel" id="unlocks-body"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="crk-screen" id="scr-settings" aria-labelledby="set-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home">← Back</button><h2 id="set-title">Settings</h2></header>
+      <form class="crk-panel crk-form" id="settings-form" onsubmit="return false">
+        <label class="crk-lbl">Commentary
+          <select name="commentary" class="crk-select"><option value="serious">Serious</option><option value="light">Light banter</option><option value="full">Full nonsense</option><option value="off">Off</option></select></label>
+        <label class="crk-check"><input type="checkbox" name="assistTiming"> Assisted timing (wider window, timing bar, bounce marker)</label>
+        <label class="crk-check"><input type="checkbox" name="assistRun"> Assisted running (AI calls runs; you can still Return)</label>
+        <label class="crk-check"><input type="checkbox" name="autoNext"> Fast-forward: auto-start the next ball</label>
+        <label class="crk-check"><input type="checkbox" name="reducedMotion"> Reduced motion (no camera sweeps, shakes or confetti)</label>
+        <label class="crk-check"><input type="checkbox" name="sound"> Game sound (inside the Lab, the Lab mute always wins)</label>
+        <label class="crk-check"><input type="checkbox" name="labels"> Show player name labels on the field</label>
+        <p class="crk-note" id="sound-note"></p>
+        <h3>Saved data</h3>
+        <div class="crk-row"><button class="crk-btn crk-btn--danger" type="button" data-act="reset-data">Reset all cricket data</button></div>
+        <h3>Keyboard</h3>
+        <p class="crk-note">Batting: ←/→ or A/D aim · J or Space ground · K loft · L defend · H leave · R run · E return.<br>Bowling: 1–6 delivery type · arrow keys move target · Space release.<br>General: N next ball · P or Esc pause · C scorecard · F field.</p>
+      </form>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="crk-screen" id="scr-about" aria-labelledby="ab-title">
+      <header class="crk-bar"><button class="crk-btn crk-btn--ghost crk-back" data-go="home">← Back</button><h2 id="ab-title">Sources &amp; about</h2></header>
+      <div class="crk-panel" id="about-body"></div>
+    </section>
+
+    <!-- MODAL -->
+    <div class="crk-modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+      <div class="crk-modal__box">
+        <header class="crk-modal__head"><h2 id="modal-title"></h2><button class="crk-btn crk-btn--icon" data-act="modal-close" aria-label="Close">✕</button></header>
+        <div class="crk-modal__body" id="modal-body"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../../assets/js/registry.js" defer></script>
+  <script src="../../assets/js/lab.js" defer></script>
+  <script src="engine.js" defer></script>
+  <script src="physics.js" defer></script>
+  <script src="ai.js" defer></script>
+  <script src="sim.js" defer></script>
+  <script src="teams.js" defer></script>
+  <script src="tournament.js" defer></script>
+  <script src="loop.js" defer></script>
+  <script src="render.js" defer></script>
+  <script src="audio.js" defer></script>
+  <script src="commentary.js" defer></script>
+  <script src="update.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
+
+<!-- BOC/EOC - Cricket controls update - Animesh - 26.10.2026 -->
